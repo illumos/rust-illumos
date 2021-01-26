@@ -1,0 +1,11 @@
+[package]
+name = "illumos"
+description = "wrappers for various illumos-specific system libaries"
+version = "0.0.0"
+authors = ["Joshua M. Clulow <josh@sysmgr.org>", "the illumos project"]
+edition = "2018"
+license = "Apache-2.0"
+repository = "https://github.com/illumos/rust-illumos/"
+keywords = ["illumos"]
+
+[dependencies]
