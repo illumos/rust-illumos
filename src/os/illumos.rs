@@ -2,11 +2,11 @@
  * Copyright 2020 Oxide Computer Company
  */
 
+use anyhow::Result;
+use std::collections::HashMap;
+use std::ffi::{CStr, CString};
 use std::os::raw::{c_char, c_int};
 use std::process::exit;
-use std::ffi::{CString, CStr};
-use std::collections::HashMap;
-use anyhow::Result;
 
 pub fn errno() -> i32 {
     unsafe {
@@ -78,7 +78,7 @@ struct UserAttrRaw {
 }
 
 #[link(name = "secdb")]
-extern {
+extern "C" {
     fn getusernam(buf: *const c_char) -> *mut UserAttrRaw;
     fn free_userattr(userattr: *mut UserAttrRaw);
 }
@@ -109,7 +109,7 @@ pub fn get_user_attr_by_name(name: &str) -> Result<Option<UserAttr>> {
 }
 
 #[link(name = "c")]
-extern {
+extern "C" {
     fn getzoneid() -> i32;
     fn getzonenamebyid(id: i32, buf: *mut u8, buflen: usize) -> isize;
 }
@@ -131,5 +131,8 @@ pub fn zonename() -> String {
         Vec::from(&buf[0..sz as usize])
     };
     std::ffi::CStr::from_bytes_with_nul(&buf)
-        .unwrap().to_str().unwrap().to_string()
+        .unwrap()
+        .to_str()
+        .unwrap()
+        .to_string()
 }
